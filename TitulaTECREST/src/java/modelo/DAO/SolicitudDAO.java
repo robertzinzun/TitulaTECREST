@@ -54,7 +54,7 @@ public class SolicitudDAO {
     public Object consultaGeneral(){
         String sql="select idSolicitud,idAlumno,noControl,Alumno,"
                 + "tituloProyecto,fechaRegistro,fechaAtencion,estatus,"
-                + "idOpcion,Opcion,idAdministrativo,idCoordinador,idCarrera,"
+                + "idOpcion,Opcion,idAdministrativo,Coordinador,idCarrera,"
                 + "Carrera from vSolicitudes";
         Salida s=new Salida();
         ArrayList<Solicitud> solicitudes=new ArrayList<Solicitud>();
