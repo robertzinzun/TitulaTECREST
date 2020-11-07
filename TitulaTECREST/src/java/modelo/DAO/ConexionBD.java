@@ -28,9 +28,9 @@ public class ConexionBD {//Patron Sigleton
             connection=ds.getConnection();
             System.out.println("Conectado con la BD!!!!!");
         } catch (NamingException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al obtener el recurso JDBC:"+ex.getMessage());
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error al obtener la conexion:"+ex.getMessage());
         }
     }
     static public ConexionBD getInstance(){
