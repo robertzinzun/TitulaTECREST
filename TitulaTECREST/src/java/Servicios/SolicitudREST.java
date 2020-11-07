@@ -14,6 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import modelo.DAO.SolicitudDAO;
 import modelo.DTO.Salida;
@@ -56,7 +57,11 @@ public class SolicitudREST {
         Object objeto=sdao.consultaGeneral();
         return gson.toJson(objeto);
     }
-    
-
-    
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String consultarSolicitud(@PathParam("id") int idSolicitud){
+       Object objeto=sdao.consultaIndividual(idSolicitud);
+       return gson.toJson(objeto);
+    }    
 }

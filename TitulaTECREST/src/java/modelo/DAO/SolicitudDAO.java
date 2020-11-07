@@ -6,6 +6,7 @@
 package modelo.DAO;
 
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -110,7 +111,60 @@ public class SolicitudDAO {
             
     }
     public Object consultaIndividual(int idSolicitud){
-        return null;
+        String sql="select idSolicitud,idAlumno,noControl,Alumno,"
+                + "tituloProyecto,fechaRegistro,fechaAtencion,estatus,"
+                + "idOpcion,Opcion,idAdministrativo,Coordinador,idCarrera,"
+                + "Carrera from vSolicitudes where idSolicitud=?";
+        Salida s=new Salida();
+        Solicitud solicitud=new Solicitud();
+        try{
+            PreparedStatement ps=ConexionBD.getInstance().getConnection().
+                    prepareStatement(sql);
+            ps.setInt(1, idSolicitud);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                solicitud.setIdSolicitud(rs.getInt("idSolicitud"));
+                Alumno a=new Alumno();
+                a.setIdAlumno(rs.getInt("idAlumno"));
+                a.setNoControl(rs.getString("noControl"));
+                a.setNombre(rs.getString("Alumno"));
+                Carrera c=new Carrera();
+                c.setIdCarrera(rs.getInt("idCarrera"));
+                c.setNombre(rs.getString("Carrera"));
+                a.setCarrera(c);
+                solicitud.setAlumno(a);
+                solicitud.setTituloProyecto(rs.getString("tituloProyecto"));
+                solicitud.setFechaRegistro(rs.getString("fechaRegistro"));
+                solicitud.setFechaAtencion(rs.getString("fechaAtencion"));
+                solicitud.setEstatus(rs.getString("estatus"));
+                Opcion o=new Opcion();
+                o.setIdOpcion(rs.getInt("idOpcion"));
+                o.setNombre(rs.getString("Opcion"));
+                solicitud.setOpcion(o);
+                Administrativo ad=new Administrativo();
+                ad.setIdAdministrativo(rs.getInt("idAdministrativo"));
+                ad.setNombre(rs.getString("Coordinador"));
+                solicitud.setAdministrativo(ad);
+                solicitud.setTipoUsuario("");
+            }
+            rs.close();
+            ps.close();
+            ConexionBD.getInstance().cerrar();
+            
+        }
+        catch(SQLException ex){
+            System.out.println("Error al ejecutar:"+sql+", "+ex.getMessage());
+            s.setEstatus("Error:");
+            s.setMensaje("Error al ejecutar:"+sql);
+            return s;
+        }
+        if(solicitud.getIdSolicitud()!=0)
+            return solicitud;
+        else{
+            s.setEstatus("OK");
+            s.setMensaje("No hay una solicitud con el folio:"+idSolicitud);
+            return s;
+        }
     }
     
 }
