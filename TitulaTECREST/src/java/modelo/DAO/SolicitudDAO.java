@@ -17,7 +17,7 @@ import modelo.DTO.Solicitud;
  */
 public class SolicitudDAO {
     public Salida agregar(Solicitud solicitud){
-        String sql="{call sp_registra_solicitud(?,?,?,?,?)}";
+        String sql="{call sp_registrar_solicitud(?,?,?,?,?)}";
         Salida salida=new Salida();
         try{
             CallableStatement cs=ConexionBD.getInstance().getConnection().prepareCall(sql);
