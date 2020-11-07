@@ -10,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -32,12 +33,14 @@ public class SolicitudREST {
     private UriInfo context;
     Gson gson;
     SolicitudDAO sdao;
+    Salida salida;
     /**
      * Creates a new instance of SolicitudREST
      */
     public SolicitudREST() {
         gson=new Gson();
         sdao=new SolicitudDAO();
+        salida=new Salida();
     }
     
     @POST
@@ -45,7 +48,7 @@ public class SolicitudREST {
     @Produces(MediaType.APPLICATION_JSON)
     public String registrar(String json){
         Solicitud solicitud=gson.fromJson(json, Solicitud.class);
-        Salida salida=sdao.agregar(solicitud);
+        salida=sdao.agregar(solicitud);
         return gson.toJson(salida);
     }
     @GET
@@ -63,5 +66,21 @@ public class SolicitudREST {
     public String consultarSolicitud(@PathParam("id") int idSolicitud){
        Object objeto=sdao.consultaIndividual(idSolicitud);
        return gson.toJson(objeto);
-    }    
+    } 
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String eliminarSolicitud(@PathParam("id") int idSolicitud){
+        salida=sdao.eliminar(idSolicitud);
+        return gson.toJson(salida);
+    }
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String modificarSolicitud(String json){
+        Solicitud solicitud=gson.fromJson(json, Solicitud.class);
+        salida=sdao.modificar(solicitud);
+        return gson.toJson(salida);
+    }
+    
 }
