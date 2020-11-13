@@ -67,6 +67,15 @@ public class SolicitudREST {
        Object objeto=sdao.consultaIndividual(idSolicitud);
        return gson.toJson(objeto);
     } 
+    /*
+    @GET
+    @Path("/Alumno/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String consultarSolicitudPorAlumno(@PathParam("id") int idAlumno){
+       Object objeto=sdao.consultarPorAlumno(idAlumno);
+       return gson.toJson(objeto);
+    } 
+    */
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

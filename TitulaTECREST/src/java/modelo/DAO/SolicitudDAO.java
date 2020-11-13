@@ -104,8 +104,7 @@ public class SolicitudDAO {
         Salida s=new Salida();
         ArrayList<Solicitud> solicitudes=new ArrayList<Solicitud>();
         try{
-            Statement query=ConexionBD.getInstance().getConnection().
-                    createStatement();
+            Statement query=ConexionBD.getInstance().getConnection().createStatement();
             ResultSet rs=query.executeQuery(sql);
             while(rs.next()){
                 Solicitud solicitud=new Solicitud();
@@ -137,7 +136,6 @@ public class SolicitudDAO {
             rs.close();
             query.close();
             ConexionBD.getInstance().cerrar();
-            
         }
         catch(SQLException ex){
             System.out.println("Error al ejecutar:"+sql+", "+ex.getMessage());
@@ -207,6 +205,64 @@ public class SolicitudDAO {
         else{
             s.setEstatus("OK");
             s.setMensaje("No hay una solicitud con el folio:"+idSolicitud);
+            return s;
+        }
+    }
+    public Object consultarPorAlumno(int idAlumno){
+        String sql="select idSolicitud,idAlumno,noControl,Alumno,"
+                + "tituloProyecto,fechaRegistro,fechaAtencion,estatus,"
+                + "idOpcion,Opcion,idAdministrativo,Coordinador,idCarrera,"
+                + "Carrera from vSolicitudes where idAlumno=?";
+        Salida s=new Salida();
+        ArrayList<Solicitud> solicitudes=new ArrayList<Solicitud>();
+        try{
+            PreparedStatement ps=ConexionBD.getInstance().getConnection().
+                    prepareStatement(sql);
+            ps.setInt(1, idAlumno);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                Solicitud solicitud=new Solicitud();
+                solicitud.setIdSolicitud(rs.getInt("idSolicitud"));
+                Alumno a=new Alumno();
+                a.setIdAlumno(rs.getInt("idAlumno"));
+                a.setNoControl(rs.getString("noControl"));
+                a.setNombre(rs.getString("Alumno"));
+                Carrera c=new Carrera();
+                c.setIdCarrera(rs.getInt("idCarrera"));
+                c.setNombre(rs.getString("Carrera"));
+                a.setCarrera(c);
+                solicitud.setAlumno(a);
+                solicitud.setTituloProyecto(rs.getString("tituloProyecto"));
+                solicitud.setFechaRegistro(rs.getString("fechaRegistro"));
+                solicitud.setFechaAtencion(rs.getString("fechaAtencion"));
+                solicitud.setEstatus(rs.getString("estatus"));
+                Opcion o=new Opcion();
+                o.setIdOpcion(rs.getInt("idOpcion"));
+                o.setNombre(rs.getString("Opcion"));
+                solicitud.setOpcion(o);
+                Administrativo ad=new Administrativo();
+                ad.setIdAdministrativo(rs.getInt("idAdministrativo"));
+                ad.setNombre(rs.getString("Coordinador"));
+                solicitud.setAdministrativo(ad);
+                solicitud.setTipoUsuario("");
+                solicitudes.add(solicitud);
+            }
+            rs.close();
+            ps.close();
+            ConexionBD.getInstance().cerrar();
+            
+        }
+        catch(SQLException ex){
+            System.out.println("Error al ejecutar:"+sql+", "+ex.getMessage());
+            s.setEstatus("Error:");
+            s.setMensaje("Error al ejecutar:"+sql);
+            return s;
+        }
+        if(solicitudes.size()>0)
+            return solicitudes;
+        else{
+            s.setEstatus("OK");
+            s.setMensaje("No hay solicitudes registradas para el alumno:"+idAlumno);
             return s;
         }
     }
