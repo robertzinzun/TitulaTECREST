@@ -33,7 +33,6 @@ public class SIEService {
     
     @WebMethod(operationName = "consultarDocente")
     public Docente consultarDocente(@WebParam(name = "noDocente") int noDocente) {
-        //TODO write your implementation code here:
         return docenteDAO.consultaIndividual(noDocente);
     }
 
@@ -54,7 +53,7 @@ public class SIEService {
         //TODO write your implementation code here:
         return alumnoDAO.consultarAlumno(noControl);
     }  
-    
+       
     /**
      * Web service operation
      */
