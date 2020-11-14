@@ -54,9 +54,6 @@ public class SolicitudREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String consultarSolicitudes(){
-        /*Salida s=new Salida();
-        s.setEstatus("OK");
-        s.setMensaje("Hola");*/
         Object objeto=sdao.consultaGeneral();
         return gson.toJson(objeto);
     }
